@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="_02_Tinder:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/_02_Tinder_jar</output-path>
+    <root id="archive" name="_02_Tinder.jar">
+      <element id="module-output" name="_02_Tinder" />
+    </root>
+  </artifact>
+</component>
