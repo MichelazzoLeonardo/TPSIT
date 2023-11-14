@@ -1,5 +1,4 @@
 import WebCrawler.WebCrawler;
-import WebCrawler.WebCrawler.*;
 
 import java.util.Scanner;
 
@@ -16,6 +15,6 @@ public class Main {
         depth=scan.nextInt();
 
         WebCrawler crawler = new WebCrawler(rootUrl, depth);
-        crawler.startCrawling();
+        crawler.Crawl();
     }
 }

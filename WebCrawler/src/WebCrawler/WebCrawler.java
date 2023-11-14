@@ -1,6 +1,9 @@
 package WebCrawler;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,37 +11,39 @@ import org.jsoup.select.Elements;
 
 public class WebCrawler {
     private String rootUrl;
-    private int depth;
+    private int searchDepth;
 
     public WebCrawler(String startUrl, int depth) {
-        this.rootUrl = startUrl;
-        this.depth=depth;
+        if (!startUrl.startsWith("https://") && !startUrl.startsWith("http://"))
+            rootUrl = "https://" + startUrl;
+        else
+            rootUrl = startUrl;
+        searchDepth = depth;
     }
 
-    public void startCrawling() {
+    public void Crawl() {
+        System.out.println("Crawling: " + rootUrl);
         try {
-            crawlPage(rootUrl, depth);
+            crawlPage(rootUrl, 0);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void crawlPage(String url, int depth) throws IOException {
-        if (depth <= 0)
-            return;
+        if (depth < searchDepth) {
+            Document document = Jsoup.connect(url).get();
 
-        System.out.println("Crawling: " + url);
+            Elements refs = document.select("a[href]");
+            for (Element ref : refs) {
+                String link = ref.absUrl("href");
 
-        Document document = Jsoup.connect(url).get();
+                for (int i = 0; i < depth; i++)
+                    System.out.print("\t");
+                System.out.println(depth + ": " + link);
 
-        Elements refs = document.select("a[href]");
-        for (Element ref : refs) {
-            String link = ref.absUrl("href");
-
-            System.out.println("New Link found: " + link);
-
-            depth--;
-            crawlPage(link, depth);
+                crawlPage(link, depth+1);
+            }
         }
     }
 }
